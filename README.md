@@ -8,7 +8,7 @@ Docker file used to build image for maven java application
 Docker build command:
 =====================
 
-docker build --build-arg giturl=<maven-git-url>\
-  --build-arg artifactid=<artifactId>\
+docker build --build-arg giturl=<maven-git-url> \
+  --build-arg artifactid=<artifactId> \
   --build-arg version=1.0.0\
   -t maven/testapp:1.0.0 .

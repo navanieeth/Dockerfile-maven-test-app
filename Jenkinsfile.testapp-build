@@ -1,0 +1,49 @@
+#!/usr/bin/env groovy
+pipeline {
+
+  agent any
+
+  parameters {
+    string(name: 'APP_TAG', defaultValue: 'vX.XX.X', description: 'Tag of maven test app branch to build from')
+    string(name: 'GIT_URL_APP', defaultValue: 'App maven project url', description: 'test app maven project url')
+    string(name: 'ARTIFACT_ID', defaultValue: 'Springboot-web-app', description: 'application artifcate name')
+  }
+
+  options {
+    buildDiscarder(logRotator(numToKeepStr: '10', artifactNumToKeepStr: '10'))
+    timestamps()
+  }
+
+  environment {
+    ECR_URL   = "00000000000.dkr.ecr.xxxx.amazonaws.com"  //add the your AWS private ECR url
+  }
+
+  stages {
+    stage('Cloning Git') {
+      steps {
+        git 'https://github.com/navanieeth/Dockerfile-maven-test-app.git'
+      }
+    } //end stage(Git clone)
+
+    stage('Docker Build + Tag + Push') {
+      steps{
+        script {
+          sh "docker build -build-arg giturl=${params.GIT_URL_APP} --build-arg artifactid=${params.ARTIFACT_ID} --build-arg version=${params.APP_TAG} -t mavenapp testapp"
+          sh "docker tag mavenapp:latest ${env.ECR_URL}/mavenapp:${paramsenv.APP_TAG}"
+          withDockerRegistry(url: "https://${env.ECR_URL}/mavenapp", credentialsId:"xxxxxx"){
+          sh "docker push ${env.ECR_URL}/mavenapp:${params.APP_TAG}"
+        }
+      }
+    }
+    } //end stage('Docker Build + Tag + Push')
+
+  } //end stages
+  
+  post {
+    cleanup {
+      cleanWs()
+      sh 'docker container prune -f'
+      sh 'docker image prune -f'
+    }
+  }//end post
+}//end pipeline

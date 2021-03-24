@@ -15,7 +15,7 @@ pipeline {
   }
 
   environment {
-    ECR_URL   = "00000000000.dkr.ecr.xxxx.amazonaws.com"  //add the your AWS private ECR url
+    ECR_URL   = "aws_account_id.dkr.ecr.region.amazonaws.com"  //add the your AWS private ECR url
   }
 
   stages {

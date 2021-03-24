@@ -10,6 +10,6 @@ ARG artifactid
 ARG version
 ENV artifact ${artifactid}-${version}.jar
 WORKDIR /testapp
-COPY --from=build /testapp/app/target/${artifact} /testapp
+COPY --from=build /testapp/app/target/${artifact} /testapp/test.jar
 EXPOSE 8080
-CMD ["java -jar ${artifact}"]
+CMD ["java -jar test.jar"]

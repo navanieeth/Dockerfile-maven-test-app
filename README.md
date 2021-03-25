@@ -14,6 +14,6 @@ Using parameters so that it can be reused for other maven projects as well.
 
 Jenkins pipeline script:
 ========================
- 1. provisioned to get the user input for tags and artifact id
- 2. It has multiple stages to clone, build, tag and push to ECR repository
- 3. Finally it will remove the unused and exited containers and images. It is one of the best practices to save the storage space.
+1. provisioned to get the user input for tags and artifact id
+2. It has multiple stages to clone, build, tag and push to ECR repository
+3. Finally it will remove the unused and exited containers and images. It is one of the best practices to save the storage space.
